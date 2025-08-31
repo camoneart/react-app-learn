@@ -1,33 +1,47 @@
 import { useState } from "react";
+import { useAuth } from "./context/AuthContext";
 
 const Lesson4_1 = () => {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleLogin = () => {};
+  const { login, user, logout } = useAuth();
+
+  // ログアウト時に入力欄もクリアする
+  const handleLogout = () => {
+    logout();
+    setUsername("");
+    setPassword("");
+  };
+
+  const handleLogin = () => {
+    login({ id: "1", username, password });
+  };
 
   return (
     <div>
-      <div>
-        <p>ログイン済み:</p>
-        <button>ログアウト</button>
-      </div>
-
-      <div>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <button onClick={handleLogin}>ログイン</button>
-      </div>
+      {user ? (
+        <div>
+          <p>ログイン済み:</p>
+          <button onClick={handleLogout}>ログアウト</button>
+        </div>
+      ) : (
+        <div>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button onClick={handleLogin}>ログイン</button>
+        </div>
+      )}
     </div>
   );
 };
