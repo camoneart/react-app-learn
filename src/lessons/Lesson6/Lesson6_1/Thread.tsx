@@ -1,9 +1,40 @@
-const Thread = () => {
-  const handleSubmit = async () => {};
+import { useOptimistic } from "react";
+import { Message } from "./Lesson6_1";
+
+const Thread = ({
+  messages,
+  sendMessage,
+}: {
+  messages: Message[];
+  sendMessage: (formData: FormData) => Promise<void>;
+}) => {
+  const formAction = async (formData: FormData) => {
+    const messageText = formData.get("message");
+    addOptimisticMessage(messageText);
+    await sendMessage(formData);
+  };
+
+  const [optimisticMessages, addOptimisticMessage] = useOptimistic(
+    messages,
+    (state, newMessage) => [
+      {
+        text: newMessage as string,
+        sending: true,
+        key: state.length + 1,
+      },
+      ...state,
+    ]
+  );
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      {optimisticMessages.map((message) => (
+        <div key={message.key}>
+          {message.text}
+          {!!message.sending && <small> (Sending...)</small>}
+        </div>
+      ))}
+      <form action={formAction}>
         <input
           type="text"
           name="message"
