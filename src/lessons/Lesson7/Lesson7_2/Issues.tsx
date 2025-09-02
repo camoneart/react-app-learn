@@ -6,7 +6,7 @@ const fetcher = (args: string) => fetch(args).then((res) => res.json());
 
 const Issues = ({ page }: { page: number | boolean | (() => void) }) => {
   const { data: issues } = useSWR(
-    `https://api.github.com/repos/facebook/react/issues?per_page=10&state=all&page=${page}`,
+    `https://api.github.com/repos/facebook/react/issues?per_page=50&state=all&page=${page}`,
     fetcher
   );
   return (

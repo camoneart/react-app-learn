@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useTransition } from "react";
 
 const TabButton = ({
   children,
@@ -17,14 +17,18 @@ const TabButton = ({
     );
   }
 
+  const [isPending, startTransition] = useTransition();
+
   return (
     <button
       onClick={() => {
-        onClick();
+        startTransition(() => {
+          onClick();
+        });
       }}
       className="border-2 px-2 py-2 rounded-md"
     >
-      {children}
+      {isPending ? "Loading..." : children}
     </button>
   );
 };

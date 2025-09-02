@@ -2,6 +2,7 @@
 import Albums from "./Albums.js";
 import Biography from "./Biography.js";
 import Panel from "./Panel.js";
+import { Suspense } from "react";
 
 export default function ArtistPage({ artist }: any) {
   return (
@@ -9,7 +10,9 @@ export default function ArtistPage({ artist }: any) {
       <h1>{artist.name}</h1>
       <Biography artistId={artist.id} />
       <Panel>
-        <Albums artistId={artist.id} />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Albums artistId={artist.id} />
+        </Suspense>
       </Panel>
     </>
   );

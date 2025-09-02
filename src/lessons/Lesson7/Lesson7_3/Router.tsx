@@ -2,12 +2,16 @@ import { useState } from "react";
 import IndexPage from "./IndexPage";
 import ArtistPage from "./ArtistPage";
 import Layout from "./Layout";
+import { Suspense, useTransition } from "react";
 
 const Router = () => {
   const [page, setPage] = useState("/");
+  const [isPending, startTransition] = useTransition();
 
   function navigate(url: string) {
-    setPage(url);
+    startTransition(() => {
+      setPage(url);
+    });
   }
 
   let content;
@@ -23,7 +27,11 @@ const Router = () => {
       />
     );
   }
-  return <Layout>{content}</Layout>;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Layout isPending={isPending}>{content}</Layout>
+    </Suspense>
+  );
 };
 
 export default Router;
